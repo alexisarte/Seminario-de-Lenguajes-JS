@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title> Michis punto com </title>
+
+
+
+    <script type="text/javascript">
+
+        const MAX_HEIGHT = 800;
+        const DELAY_SECONDS = 2;
+
+        function michi() {
+            //Fetch devuelve un objeto promise, recibir el promise y pasarle al .then, una funcion que convierta esa respuesta de JSON a un objeto en JS
+            fetch('https://api.thecatapi.com/v1/images/search')
+                .then(response => response.json())
+                .then(cats => cats[0])
+                .then(cat => showMeTheCat(cat.url, cat.width, cat.height))
+                .catch(err => console.log(err));
+
+            //el metodo Then recibe una funcion callback, que es la funcion que se va a ejecutar cuando se reciba el fetch,
+            // por eso es asincronico, no se sabe cuando llegara la informacion pero cuando llegue se ejecuta la funcion
+
+        }
+
+        //Muestra la imagen recibida de la api, setea el timer para recibir la proxima
+        function showMeTheCat(url, w, h) {
+
+            //Crea un elemento imagen!!
+            let img = document.createElement('img');
+
+            //Manejar los tamaños
+            if (h > MAX_HEIGHT) {
+
+                let factor = h / MAX_HEIGHT;
+                img.width = w / factor;
+                img.height = h / factor;
+            } else {
+                img.width = w;
+                img.height = h;
+            }
+
+            //Salvar url en la propiedad src del elemento IMG creado
+            img.src = url;
+
+            //salva el elemento frame en una variable llamada frame
+            let frame = document.getElementById('frame');
+
+
+            //Si hay una imagen, quitarla
+            while (frame.firstChild != null) {
+                frame.removeChild(frame.firstChild);
+            }
+
+            //Darle un event listener a la img, cuando se carga ejecuta un settimeout, el timer para generar la proxima imagen
+            img.addEventListener('load', function () { setTimeout(michi, DELAY_SECONDS * 1000) });
+
+            //Agregar la nueva imagen
+            frame.appendChild(img);
+
+        }
+
+    </script>
+
+
+</head>
+
+<!-- Cuando se cargue el elemento body, ejectuar michi()  -->
+
+<body onload="michi()">
+
+
+
+    <h1>Explicacion de los michis michin michinsss </h1>
+
+    <div id="frame"></div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio-16</title>
+</head>
+
+<body>
+    <!-- Ejercicio 16
+    Cree un documento html con 3 inputs y un botón con el texto "Sumar". Al cliquear en el botón se suman
+    los valores de los primeros 2 inputs y el resultado de esa suma se debe ver en el tercer input.
+    ¿Qué pasa si no hay ningún texto ingresado en alguno de los dos primeros inputs? ¿Cómo lo resuelve?
+    ¿Qué pasa si alguno de los textos ingresados no es un número? ¿Cómo lo resuelve?
+    ¿Qué pasa si al tercer input se le agrega el siguiente atributo? readonly="readonly" -->
+    <form>
+        <input type="number" id="numero1" />
+        </br>
+        <input type="number" id="numero2" />
+        </br>
+        <input type="number" id="numero3" />
+        <input type="button" value="Sumar" onclick="sumar()" />
+    </form>
+    <script>
+        function selector(texto) {
+            return document.getElementById(texto).value;
+        }
+        function sumar() {
+            // selector('texto3') = selector('texto') + selector('texto2');
+            return document.getElementById('numero3').value = document.getElementById('numero2').value + document.getElementById('numero1').value;
+
+        }
+    </script>
+</body>
+
+</html>
