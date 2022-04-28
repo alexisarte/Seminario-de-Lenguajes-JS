@@ -17,11 +17,8 @@ function filterRecursive(URL) {
             .catch(function () { unorderedList.innerHTML = 'The text entered does not match any title' });
     } else if (URL == 'https://rickandmortyapi.com/api/episode/?name='){
         unorderedList.innerHTML = 'The text entered does not match any title'
-        
     }
 }
-
-// function() { unorderedList.innerHTML = 'The text entered does not match any title' }
 
 function rickAndMorty() {
     const URL = 'https://rickandmortyapi.com/api/episode';
