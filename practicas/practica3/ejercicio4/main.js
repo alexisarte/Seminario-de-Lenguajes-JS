@@ -1,19 +1,10 @@
-function rickAndMorty() {
-    let link = 'https://rickandmortyapi.com/api/episode';
-    rickAndMortyRecursive(link);
-}
-
-function rickAndMortyRecursive(link) {
-    if (link != null) {
-        fetch(link)
-            .then(response => response.json())
-            .then(response => {
-                response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode));
-                return response.info.next;
-            })
-            .then(response => rickAndMortyRecursive(response))
-            .catch(err => console.log(err));
-    }
+function fetchRickAndMorty() {
+    fetch('https://rickandmortyapi.com/api/episode')
+        .then(response => response.json())
+        .then(response => {
+            response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode));
+        })
+        .catch(err => console.log(err));
 }
 
 function showEpisodes(name, air_date, episode) {
@@ -24,3 +15,5 @@ function showEpisodes(name, air_date, episode) {
     unorderedList.appendChild(listElement);
     unorderedList.appendChild(br);
 }
+
+window.addEventListener('load', fetchRickAndMorty);
