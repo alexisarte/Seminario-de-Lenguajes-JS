@@ -53,7 +53,19 @@ function showEpisodes(name, air_date, episode) {
     unorderedList.appendChild(br);
 }
 
+function page() {
+    while (unorderedList.firstChild != null) {
+        unorderedList.removeChild(unorderedList.firstChild);
+    }
+    const URL = 'https://rickandmortyapi.com/api/episode?page=' + document.querySelector("select").value; 
+    if (URL != null) {
+        fetch(URL)
+            .then(response => response.json())
+            .then(response => response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode)))
+            .catch(err => console.log(err));
+    }
+}
 
-
-// const button = document.getElementById("button");
-// button.addEventListener('click', filter());
+// como hacer que esto funcione???
+// const select = document.getElementById("select");
+// select.addEventListener('click', page());

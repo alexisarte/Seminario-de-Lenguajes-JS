@@ -17,7 +17,6 @@ function michi() {
     // por eso es asincronico, no se sabe cuando llegara la informacion pero cuando llegue se ejecuta la funcion
 }
 
-
 //Muestra la imagen recibida de la api, setea el timer para recibir la proxima
 function showMeTheCat(url, width, height) {
     //Crea un elemento imagen!!
