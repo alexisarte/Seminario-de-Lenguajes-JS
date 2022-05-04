@@ -1,6 +1,11 @@
-function fetchRickAndMorty() {
-    fetch('https://rickandmortyapi.com/api/episode')
-        .then(response => response.json())
+function fetchRickAndMorty(url) {
+    fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            } else 
+                throw new function () { unorderedList.innerHTML = 'The text entered does not match any title' }
+        })
         .then(response => {
             response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode));
         })
@@ -16,13 +21,15 @@ function showEpisodes(name, air_date, episode) {
     unorderedList.appendChild(br);
 }
 
-function filter() {
-    let VALUE = document.querySelector("filter").value;
-    let url = 'https://rickandmortyapi.com/api/episode/?name=' + VALUE;
-    while (unorderedList.firstChild != null) {
+function search() {
+    let episodeName = document.getElementById("entry").value;   // por qué no funciona queryselector()?
+    let url = 'https://rickandmortyapi.com/api/episode/?name=' + episodeName;
+    while (unorderedList.firstChild != null) {  // let como variable global??
         unorderedList.removeChild(unorderedList.firstChild);
     }
     fetchRickAndMorty(url);
 }
 
-window.addEventListener('load', fetchRickAndMorty);
+window.addEventListener('load', fetchRickAndMorty('https://rickandmortyapi.com/api/episode'));
+let button = document.querySelector('button');
+button.addEventListener('click', search);

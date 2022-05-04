@@ -1,47 +1,15 @@
-function filterRecursive(URL) {
-    let unorderedList = document.getElementById('unorderedList');
-    if (URL != null && URL != 'https://rickandmortyapi.com/api/episode/?name=' && !URL.includes('page')) {
-        while (unorderedList.firstChild != null) {
-            unorderedList.removeChild(unorderedList.firstChild);
-        }
-    }
-    if (URL != null && URL != 'https://rickandmortyapi.com/api/episode/?name=') {
-        fetch(URL)
-            .then(response => response.json())
-            .then(response => {
-                
-                response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode));
-                return response.info.next;
-            })
-            .then(response => filterRecursive(response))
-            .catch(function () { unorderedList.innerHTML = 'The text entered does not match any title' });
-    } else if (URL == 'https://rickandmortyapi.com/api/episode/?name='){
-        unorderedList.innerHTML = 'The text entered does not match any title'
-    }
-}
-
-function rickAndMorty() {
-    const URL = 'https://rickandmortyapi.com/api/episode';
-    rickAndMortyRecursive(URL);
-}
-
-function filter() {
-    const VALUE = document.getElementById("filter").value;
-    const url = 'https://rickandmortyapi.com/api/episode/?name=' + VALUE;
-    filterRecursive(url);
-}
-
-function rickAndMortyRecursive(URL) {
-    if (URL != null) {
-        fetch(URL)
-            .then(response => response.json())
-            .then(response => {
-                response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode));
-                return response.info.next;
-            })
-            .then(response => rickAndMortyRecursive(response))
-            .catch(err => console.log(err));
-    }
+function fetchRickAndMorty(url) {
+    fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json()
+            } else
+                throw new function () { unorderedList.innerHTML = 'Sorry, the resource was not found' }
+        })
+        .then(response => {
+            response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode));
+        })
+        .catch(err => console.log(err));
 }
 
 function showEpisodes(name, air_date, episode) {
@@ -53,19 +21,31 @@ function showEpisodes(name, air_date, episode) {
     unorderedList.appendChild(br);
 }
 
-function page() {
-    while (unorderedList.firstChild != null) {
-        unorderedList.removeChild(unorderedList.firstChild);
-    }
-    const URL = 'https://rickandmortyapi.com/api/episode?page=' + document.querySelector("select").value; 
-    if (URL != null) {
-        fetch(URL)
-            .then(response => response.json())
-            .then(response => response.results.forEach(element => showEpisodes(element.name, element.air_date, element.episode)))
-            .catch(err => console.log(err));
+function search() {
+    let episodeName = document.getElementById("entry").value;   // por qué no funciona queryselector()?
+    let url = 'https://rickandmortyapi.com/api/episode/?name=' + episodeName;
+    if (episodeName != '') {
+        remove();
+        fetchRickAndMorty(url);
+    } else {
+        alert('Ingrese el nombre del episodio a buscar')
     }
 }
 
-// como hacer que esto funcione???
-// const select = document.getElementById("select");
-// select.addEventListener('click', page());
+function remove() {
+    while (unorderedList.firstChild != null) {
+        unorderedList.removeChild(unorderedList.firstChild);
+    }
+}
+
+function page() {
+    let url = 'https://rickandmortyapi.com/api/episode?page=' + selection.value;
+    remove();
+    fetchRickAndMorty(url);
+}
+
+window.addEventListener('load', fetchRickAndMorty('https://rickandmortyapi.com/api/episode'));
+let button = document.querySelector('button');
+button.addEventListener('click', search);
+let selection = document.querySelector("select");
+selection.addEventListener('change', page);
