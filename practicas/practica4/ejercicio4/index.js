@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-const EMAIL = example@gmail.com; 
-const USERNAME = pancracio;
+const USERNAME = 'admin@mail.com'; 
+const PASSWORD = '1234';
 
 // Middlewares
 app.use(express.static('public'));
@@ -20,11 +20,7 @@ app.get('/exit', (req, res) => {
 app.post('/submit-form', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    if (username == USERNAME && password == PASSWORD) {
-        res.redirect('/exit');
-    } else {
-        res.redirect('/');
-    }
+    ((username == USERNAME) && (password == PASSWORD)) ? res.redirect('/exit') : res.redirect('/'); 
     console.log('Username: ' + username);
     console.log('Password: ' + password);
     res.end();
