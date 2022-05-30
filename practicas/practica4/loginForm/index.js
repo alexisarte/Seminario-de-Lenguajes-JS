@@ -19,6 +19,20 @@ app.get('/successful', (req, res) => {
     res.send('SUCCESSFUL!');
 });
 
+app.get('/names', (req, res) => {
+    const username = req.query.username;
+    let person;
+    if ((typeof username) === 'string') {
+        person = people.find(p => (p.username == username));
+        if (person != undefined) {
+            res.json({ name: person.name });
+        }
+    }
+    if (person == undefined) {
+        res.send('<h1>400 Bad Request</h1>');
+    }
+});
+
 app.post('/submit-form', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
