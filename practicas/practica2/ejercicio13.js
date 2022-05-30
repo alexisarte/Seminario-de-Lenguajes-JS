@@ -21,7 +21,7 @@ var charly = {
     weight: 102
 };
 var lucy = {
-    name: "Lucía",
+    name: "Lucia",
     dob: new Date(1955, 7, 7),
     height: 155,
     weight: 61
@@ -64,20 +64,21 @@ function namesOfOverweightPeople(people) {
 // 2. Implemente una función que devuelva un arreglo de las edades de las personas indexado por el
 // nombre de cada una. (Por ejemplo algo de la forma["Bobby": 22, "Mark": 36]).
 
-function getAge(dob) {
-    const DATE = new Date(new Date().getTime() - dob.getTime());
+function getAge(person) {
+    const DATE = new Date(new Date().getTime() - person.dob.getTime());
     return DATE.getFullYear() - 1970;
 }
 
 function ages(people) {
-    const INDEXED = people.reduce((acc, el) => { acc[el.name] = getAge(el.dob); return acc }, []);
+    const INDEXED = people.reduce((acc, el) => { acc[el.name] = getAge(el); return acc }, []);
     return INDEXED;
 }
+
 
 // 3. Implemente una función que devuelva un arreglo con el IMC de los mayores de 40.
 
 function nombresPersonasMayores(people) {
-    return filterAndMap(person => getAge(person.dob) > 40, person => bodyMassIndex(person), people);
+    return filterAndMap(person => getAge(person) > 40, person => bodyMassIndex(person), people);
 }
 
 
@@ -94,7 +95,7 @@ function bodyMassIndexPromedio(people) {
 function younger(people) {
     let younger = people[5];
     people.forEach(person => {
-        if (getAge(person.dob) < getAge(younger.dob)) younger = person
+        if (getAge(person) < getAge(younger)) younger = person
     });
     return younger;
 }
