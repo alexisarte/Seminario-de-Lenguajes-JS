@@ -1,10 +1,12 @@
 body {
+    margin: 0;
+    min-height: 100vh;
     background-color: black;
     text-align: center;
     color: white;
 }
 
-.pokemon-container {
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,21 +29,29 @@ li:hover {
     cursor: pointer;
 }
 
-#pokemon-container2 {
-    background-color: gray;
-    max-width: 50%;
-    min-height: 200px;
+#pokemon-container {
     width: 20%;
-    float: right;
+    background-color: #f22625;
+    padding: 1em;
     margin: auto;
+    border-radius: 1em;
+    color: white;
+    font-family: system-ui;
+    max-width: 50%;
+    min-height: 300px;
+    float: right;
     visibility: hidden;
+}
+
+.img-container {
+    background-color: white;
 }
 
 .pokemon-data {
     min-height: 237px;
 }
 
-.pokemonName {
+#pokemonName {
     text-transform: capitalize;
     font-weight: bold;
     font-size: 1.2rem;

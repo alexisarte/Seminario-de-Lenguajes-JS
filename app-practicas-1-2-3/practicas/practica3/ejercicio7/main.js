@@ -1,10 +1,9 @@
 const API_URL = 'https://pokeapi.co/api/v2/';
-const QUANTITY = 20;
-const PAGE_URL = API_URL + `pokemon/?limit=${QUANTITY}&offset=`;
-const COUNT = 1154;
+const LIMIT = 20;
+const PAGE_URL = API_URL + `pokemon/?limit=${LIMIT}&offset=`;
+const POKEMONES = 1154;
 
-const pokemonList = document.querySelector('.pokemon-list');
-const pokemonData = document.querySelector('.pokemon-data');
+const $ = s => document.querySelector(s);
 
 function fetchPokemon(name) {
     const url = `${API_URL}pokemon/${name}`;
@@ -19,27 +18,38 @@ function fetchPokemon(name) {
 function fetchPokemons(url) {
     fetch(url)
         .then(res => res.json())
-        .then(data => data.results.forEach(element => showPokemonName(element)))
+        .then(data => {
+            data.results.forEach(pokemon => showPokemonName(pokemon.name));
+            $('.pokemon-list').addEventListener('click', showPokemon);
+        })
         .catch(err => console.log(err));
 }
 
-function showPokemonName(pokemon) {
+function showPokemonName(pokemonName) {
     const name = document.createElement('li');
-    name.textContent = pokemon.name;
-    name.addEventListener('click', showPokemon);
-    pokemonList.appendChild(name);
+    name.textContent = pokemonName;
+    $('.pokemon-list').appendChild(name);
 }
 
-function showPokemon() {
+function removePokemon() {
+    const pokemonData = $('.pokemon-data');
     while (pokemonData.firstChild != null) {
         pokemonData.removeChild(pokemonData.firstChild);
     }
-    fetchPokemon(this.textContent);
-    document.querySelector('#pokemon-container2').style.visibility = 'visible';
+}
+
+function showPokemon(e) {
+    if (e.target.tagName === 'LI') {
+        removePokemon();
+        fetchPokemon(e.target.textContent);
+        $('#pokemon-container').style.visibility = 'visible';
+    }
 }
 
 function createPokemon(pokemon) {
-    const card = document.createElement('div');
+    // imagen y nombre
+    const imgContainer = document.createElement('div');
+    imgContainer.classList.add('img-container');
     const sprite = document.createElement('img');
     sprite.src = pokemon.sprites.front_default;
     const name = document.createElement('p');
@@ -47,26 +57,21 @@ function createPokemon(pokemon) {
     name.textContent = pokemon.name;
 
     // habilidades
-    const abilitiesText = document.createElement('p');
-    abilitiesText.innerHTML = 'Abilities: ';
-    pokemon.abilities.forEach(a => abilitiesText.innerHTML += a.ability.name + ', ');
+    const abilities = document.createElement('p');
+    abilities.innerHTML = 'Abilities: ';
+    pokemon.abilities.forEach(a => (abilities.innerHTML += a.ability.name + ', '));
 
     // peso y altura
-    const pokemonWandH = document.createElement('p');
-    pokemonWandH.innerHTML = `Weight: ${pokemon.weight} height: ${pokemon.height}`;
+    const weightAndHeight = document.createElement('p');
+    weightAndHeight.innerHTML = `Weight: ${pokemon.weight} height: ${pokemon.height}`;
+    imgContainer.appendChild(sprite);
 
-    //Appends
-    card.appendChild(sprite);
-    card.appendChild(name);
-    card.appendChild(abilitiesText);
-    card.appendChild(pokemonWandH);
-
-    pokemonData.appendChild(card);
+    $('.pokemon-data').append(imgContainer, name, abilities, weightAndHeight);
 }
 
 function pages() {
-    let options = document.querySelector('.options');
-    for (let i = 0; i < COUNT / QUANTITY; i++) {
+    let options = $('.options');
+    for (let i = 0; i < POKEMONES / LIMIT; i++) {
         let option = document.createElement('option');
         option.value = i;
         option.textContent = 'Page ' + (i + 1);
@@ -75,18 +80,14 @@ function pages() {
 }
 
 function pokemonsList() {
-    let options = document.querySelector('.options');
-    pokemonList.innerHTML = '';
-    let url = PAGE_URL + options.value * QUANTITY;
+    let options = $('.options');
+    $('.pokemon-list').innerHTML = '';
+    let url = PAGE_URL + options.value * LIMIT;
     fetchPokemons(url);
 }
 
-window.onload = () => {
-    fetchPokemons(`${PAGE_URL}0`);
-    pages();
-    let options = document.querySelector('.options');
-    options.addEventListener('change', pokemonsList);
-    document.querySelector('.buttons').addEventListener('click', e => {
+function nextOrPrevious(e) {
+    if (e.target.tagName === 'BUTTON') {
         const items = document.querySelectorAll('li');
         let index = 0;
         for (let i = 0; i < items.length; i++) {
@@ -94,12 +95,15 @@ window.onload = () => {
                 index = i;
             }
         }
-        while (pokemonData.firstChild != null) {
-            pokemonData.removeChild(pokemonData.firstChild);
-        }
+        removePokemon();
         e.target.id === 'next' ? index++ : index--;
-        console.log('ID', e.target.id);
-        console.log('index', index);
         fetchPokemon(items[index].textContent);
-    });
+    }
+}
+
+window.onload = () => {
+    fetchPokemons(`${PAGE_URL}0`);
+    pages();
+    $('.options').addEventListener('change', pokemonsList);
+    $('.buttons').addEventListener('click', nextOrPrevious);
 };
