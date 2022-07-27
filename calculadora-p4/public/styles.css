@@ -1,0 +1,17 @@
+body {
+    background: gray;
+}
+
+p {
+    display: inline-block;
+}
+
+div {
+    padding-top: 5%;
+    width: 50%;
+    margin: auto;
+}
+
+button {
+    display: block;
+}
